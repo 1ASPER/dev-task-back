@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Node.js
+node_modules/
+*.log
+package-lock.json
+
+# C#
+*.exe
+*.dll
+*.obj
+*.bin/
+*.user
+*.suo
+*.csproj.user
+*.vs/
+CSharpTestApp/
+
+# General
+.env
+.DS_Store
+.vscode/
+.idea/

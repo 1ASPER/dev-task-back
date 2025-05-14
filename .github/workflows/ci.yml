@@ -1,0 +1,56 @@
+name: Run All Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./python
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install -r ../requirements.txt || true
+      - name: Run Python tests
+        run: python3 -m unittest test.py
+
+  javascript-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./javascript
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run JavaScript tests
+        run: npx jest
+
+  csharp-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./csharp
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      - name: Restore dependencies
+        run: dotnet new console -n CSharpTestApp && mv solve.cs test.cs CSharpTestApp && cd CSharpTestApp && dotnet add package NUnit && dotnet add package NUnit3TestAdapter && dotnet add package Microsoft.NET.Test.Sdk
+      - name: Run C# tests
+        run: cd CSharpTestApp && dotnet test
