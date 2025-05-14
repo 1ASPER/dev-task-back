@@ -1,16 +1,19 @@
+using System;
 using System.Numerics;
 
-public static class ParenthesesCounter {
-    public static BigInteger CountWellFormedParenthesis(int nCouples) {
-        if (nCouples < 0) throw new ArgumentException("nCouples must be non-negative");
-        return Catalan(nCouples);
-    }
+public static class ParenthesisCounter
+{
+    public static BigInteger CountWellFormedParenthesis(int n)
+    {
+        if (n < 0) throw new ArgumentException("");
 
-    private static BigInteger Catalan(int n) {
         BigInteger result = 1;
-        for (int i = 1; i <= n; i++) {
-            result = result * (2 * (2 * n - i + 1)) / (i + 1);
+        for (int i = 0; i < n; i++)
+        {
+            result *= 2 * n - i;
+            result /= i + 1;
         }
-        return result;
+
+        return result / (n + 1);
     }
 }

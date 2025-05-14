@@ -40,17 +40,31 @@ jobs:
         run: npx jest
 
   csharp-tests:
+    name: Run C# tests
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./csharp
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
-      - name: Restore dependencies
-        run: dotnet new console -n CSharpTestApp && mv solve.cs test.cs CSharpTestApp && cd CSharpTestApp && dotnet add package NUnit && dotnet add package NUnit3TestAdapter && dotnet add package Microsoft.NET.Test.Sdk
-      - name: Run C# tests
-        run: cd CSharpTestApp && dotnet test
+
+      - name: Create NUnit test project
+        run: |
+          dotnet new nunit -n CSharpTestApp
+          mv solve.cs test.cs CSharpTestApp
+          cd CSharpTestApp
+          dotnet add package System.Numerics.Vectors
+          dotnet add package Microsoft.NET.Test.Sdk
+          dotnet add package NUnit3TestAdapter
+          dotnet restore
+
+      - name: Run tests
+        run: |
+          cd CSharpTestApp
+          dotnet test --logger "console;verbosity=normal"
