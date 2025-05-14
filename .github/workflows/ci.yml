@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run: npm install --save-dev jest
       - name: Run JavaScript tests
-        run: npm jest
+        run: npx jest
 
   csharp-tests:
     runs-on: ubuntu-latest
